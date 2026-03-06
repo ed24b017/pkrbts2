@@ -1,0 +1,86 @@
+2026-03-07 00:55:42 BotA vs BotB
+
+Round #1, BotA (0), BotB (0)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [5h 4d]
+BotB received [Th 6s]
+BotA raises to 1032
+BotB raises to 2635
+BotA calls
+Flop [2s Qs Jd], BotA (2635), BotB (2635)
+BotB bids 212
+BotA bids 212
+BotA won the auction and was revealed [6s]
+BotB won the auction and was revealed [5h]
+Flop [2s Qs Jd], BotA (2847), BotB (2847)
+BotB response misformatted: 
+BotB checks
+BotA response misformatted: 
+BotA checks
+Turn [2s Qs Jd Td], BotA (2847), BotB (2847)
+BotB response misformatted: 
+BotB checks
+BotA response misformatted: 
+BotA checks
+River [2s Qs Jd Td 7c], BotA (2847), BotB (2847)
+BotB response misformatted: 
+BotB checks
+BotA response misformatted: 
+BotA checks
+BotA shows [5h 4d]
+BotB shows [Th 6s]
+BotA awarded -2847
+BotB awarded 2847
+BotA disconnected
+BotB disconnected
+
+Round #2, BotB (2847), BotA (-2847)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [Kh 8s]
+BotA received [Ah Th]
+BotB disconnected
+BotB folds
+BotB awarded -10
+BotA awarded 10
+BotB disconnected
+BotA disconnected
+
+Round #3, BotA (-2837), BotB (2837)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [7s 9c]
+BotB received [Qd Th]
+BotA disconnected
+BotA folds
+BotA awarded -10
+BotB awarded 10
+BotA disconnected
+BotB disconnected
+
+Round #4, BotB (2847), BotA (-2847)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [Ad Ah]
+BotA received [5h 6s]
+BotB disconnected
+BotB folds
+BotB awarded -10
+BotA awarded 10
+BotB disconnected
+BotA disconnected
+
+Round #5, BotA (-2837), BotB (2837)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [5s 7s]
+BotB received [Td Ac]
+BotA disconnected
+BotA folds
+BotA awarded -10
+BotB awarded 10
+BotA disconnected
+BotB disconnected
+
+Final, BotB (2847), BotA (-2847)

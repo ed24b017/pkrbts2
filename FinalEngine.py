@@ -30,7 +30,7 @@ sys.path.append(os.getcwd())
 
 from config import *
 
-NUM_ROUNDS = 5
+NUM_ROUNDS = 1000
 STARTING_STACK = 5000
 BIG_BLIND = 20
 SMALL_BLIND = 10
@@ -90,14 +90,17 @@ class Trainer():
         for choice in legal_actions:
             for _ in range(nodes_to_terminal):
                 new_infoset = self.playoff(new_infoset, choice)
-                if new_infoset[4] == 1:
+                if new_infoset[0]>=5: break
+                if new_infoset[4] == 1: ## opponent folded
                     p[choice] = new_infoset[3]
-                if new_infoset[0] == -1 or new_infoset[0] == 0:
+                    new_infoset[0] = -1
+                    break
+                if new_infoset[0] == -1 or new_infoset[0] == 0: ## you folded
                     p[choice] = new_infoset[4]
-                    continue
+                    break
                 new_infoset = self.board_reveal_card(new_infoset)
                 if new_infoset[0] == 5:
-                    pass
+                    break
                 ## figure out waht to do if opponent folds
             if self.mc_evaluate(new_infoset):
                 p[choice] = new_infoset[3]
@@ -147,7 +150,7 @@ class Trainer():
         my_balance =infoset[6]
         opp_balance = infoset[7]
         if current_node >= 5:
-            continue
+            return infoset 
         if_win, if_loss, my_balance, opp_balance = self.simulate_action(choice, if_win, if_loss, my_balance, opp_balance)
         infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
         if_win, if_loss, my_balance, opp_balance= self.simulate_opponent_action(infoset)
@@ -156,6 +159,8 @@ class Trainer():
             current_node += 1
         else: 
             while if_win + if_loss > 0:
+                if current_node >= 5:
+                    break
                 if choice == 0: # fold
                     current_node = -1
                     infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
@@ -218,6 +223,7 @@ class Trainer():
         street = infoset[0]
         bucket = infoset[1]
         bucket = int((1 - bucket / NUM_BUCKETS) * NUM_BUCKETS)
+        if bucket == 25 : bucket = 24
         legal_actions = self.get_new_legal_actions(infoset)
         strategy = self.average_strategy[street][bucket]
         # Get probabilities for legal actions
@@ -254,22 +260,21 @@ class Trainer():
     def mc_evaluate(self, infoset): 
         # return true for win and false for loss
         cards = infoset[2]
-        my_hand = cards[0]
-        board = cards[1]  # Make mutable copy
-        opp_revealed = cards[2]
+        my_hand = [str(c) for c in cards[0]]
+        board = [str(c) for c in cards[1]]
+        opp_revealed = [str(c) for c in cards[2]]
 
         dead = set(my_hand + board + opp_revealed)
-        deck = [eval7.Card(r + s) for r in '23456789TJQKA' for s in 'shcd'
-                if (r + s) not in dead]
+        deck = [r + s for r in '23456789TJQKA' for s in 'shcd' if (r + s) not in dead]
         board_need = 5 - len(board)
         opp_need = 2 - len(opp_revealed)
         wins = ties = loss = 0
         for _ in range(500):
             draw = random.sample(deck, opp_need + board_need)
-            opp_hand = opp_revealed + list(draw[:opp_need])
-            full_brd = list(board) + list(draw[opp_need:])
-            my_score = eval7.evaluate([eval7.Card(c) for c in my_hand] + list(full_brd))
-            opp_score = eval7.evaluate(list(opp_hand) + list(full_brd))
+            opp_hand = opp_revealed + draw[:opp_need]
+            full_brd = board + draw[opp_need:]
+            my_score = eval7.evaluate([eval7.Card(c) for c in my_hand + full_brd])
+            opp_score = eval7.evaluate([eval7.Card(c) for c in opp_hand + full_brd])
 
             if my_score > opp_score:
                 wins += 1

@@ -114,6 +114,7 @@ class Player(BaseBot):
     
     def get_infoset_key (self, game_info: GameInfo, current_state: PokerState): 
         equity = self.equity_mc(current_state)
+        
         bucket = min(int(equity * NUM_BUCKETS), NUM_BUCKETS-1) # bucket equity into 25 buckets.
         if_loss = - self.my_bet
         if_win = self.opp_bet 
@@ -127,11 +128,11 @@ class Player(BaseBot):
         #removed the try and except error.
         
         street_int = street_map[current_state.street]
-        cards = (
+        cards = [
             current_state.my_hand,
             current_state.board,
             current_state.opp_revealed_cards
-        )
+        ]
         legal_actions = self.get_available_actions(current_state)
         return [
             street_int, 

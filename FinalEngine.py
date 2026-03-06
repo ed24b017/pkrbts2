@@ -90,10 +90,15 @@ class Trainer():
         for choice in legal_actions:
             for _ in range(nodes_to_terminal):
                 new_infoset = self.playoff(new_infoset, choice)
+                if new_infoset[4] == 1:
+                    p[choice] = new_infoset[3]
                 if new_infoset[0] == -1 or new_infoset[0] == 0:
                     p[choice] = new_infoset[4]
                     continue
                 new_infoset = self.board_reveal_card(new_infoset)
+                if new_infoset[0] == 5:
+                    pass
+                ## figure out waht to do if opponent folds
             if self.mc_evaluate(new_infoset):
                 p[choice] = new_infoset[3]
             else:
@@ -145,10 +150,10 @@ class Trainer():
         infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
         if_win, if_loss, my_balance, opp_balance= self.simulate_opponent_action(infoset)
         infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
-        if if_win + if_loss == 0: #cost_to_call is zero
+        if if_win + if_loss == 0: #cost_to_call is zero - --- opp chips - my chips > 0 -> need to call
             current_node += 1
         else: 
-            while if_win + if_loss != 0:
+            while if_win + if_loss > 0:
                 if choice == 0: # fold
                     current_node = -1
                     infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
@@ -160,11 +165,14 @@ class Trainer():
                     infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
                 else: 
                     current_node += 1
+            if if_win + if_loss < 0: # opponent folded
+                infoset[4] = 1
         self.get_new_legal_actions(infoset) # updates legal actions based on new state - for now we will just assume all actions are always legal.
         infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
         return infoset
 
     def get_new_legal_actions(self, infoset):
+        if infoset[0] == 5: return []
         available = [0]  # fold is always available
         if_win = infoset[3]
         if_loss = infoset[4]

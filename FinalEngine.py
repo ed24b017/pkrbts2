@@ -90,6 +90,7 @@ class Trainer():
         for choice in legal_actions:
             for _ in range(nodes_to_terminal):
                 new_infoset = self.playoff(new_infoset, choice)
+                if new_infoset[0]>=5: break
                 if new_infoset[4] == 1: ## opponent folded
                     p[choice] = new_infoset[3]
                     new_infoset[0] = -1
@@ -149,7 +150,7 @@ class Trainer():
         my_balance =infoset[6]
         opp_balance = infoset[7]
         if current_node >= 5:
-            continue
+            return infoset 
         if_win, if_loss, my_balance, opp_balance = self.simulate_action(choice, if_win, if_loss, my_balance, opp_balance)
         infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
         if_win, if_loss, my_balance, opp_balance= self.simulate_opponent_action(infoset)
@@ -158,6 +159,8 @@ class Trainer():
             current_node += 1
         else: 
             while if_win + if_loss > 0:
+                if current_node >= 5:
+                    break
                 if choice == 0: # fold
                     current_node = -1
                     infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]

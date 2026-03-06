@@ -15,7 +15,7 @@ from pkbot.runner import parse_args, run_bot
 import eval7
 import random
 from FinalEngine import Trainer
-
+import sys
 import numpy as np
 
 NUM_BUCKETS = 25
@@ -32,13 +32,14 @@ TERATIONS = 10
 
 class Player(BaseBot):
 
-    def __init__(self, trainer : Trainer) -> None:
+    def __init__(self, trainer : Trainer, bot_id : int = 0) -> None:
         self.reach_probab = 1
         self.my_bet = 0 # amount of chips I have put in the pot so far.
         self.opp_bet = 0 # amount of chips opponent has put in the pot so far.
         self.mc_iterations = 500
         self.action_history = []
         self.trainer = trainer
+        self.bot_id = bot_id
         self._preflop_equity = 0.5
         self.opp_bid_samples = []
         self.opp_style = "unknown"
@@ -147,9 +148,12 @@ class Player(BaseBot):
     
     def on_hand_end(self, game_info, current_state):
         if game_info.round_num % 10 == 0:
-            np.savez('trainer_data.npz',
+            filename = f'trainer_bot_{self.bot_id}.npz'
+            np.savez(filename,
                 delta_regret=self.trainer.delta_regret,
-                strategy_convergence=self.trainer.strategy_convergence
+                strategy_convergence=self.trainer.strategy_convergence,
+                regret=self.trainer.regret,
+                strategy_sum=self.trainer.strategy_sum
             )
 
     def on_hand_start(self, game_info, current_state):
@@ -265,4 +269,13 @@ class Player(BaseBot):
     
     
 if __name__ == '__main__':
-    run_bot(Player(trainer=Trainer()), parse_args())
+    # Parse bot_id from command line (passed by FinalEngine.py)
+    args = parse_args()
+    bot_id = 0
+    if len(sys.argv) > 2:
+        try:
+            bot_id = int(sys.argv[-1])
+        except (ValueError, IndexError):
+            bot_id = 0
+    
+    run_bot(Player(trainer=Trainer(), bot_id=bot_id), args)

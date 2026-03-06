@@ -303,6 +303,25 @@ class Trainer():
             self.average_strategy[street][bucket] = self.strategy_sum[street][bucket] / np.sum(self.strategy_sum[street][bucket]) # compute average strategy
         else : 
             self.average_strategy[street][bucket] = np.ones(NUM_ACTIONS) / NUM_ACTIONS
+    
+    def merge_trainer(self, other_trainer):
+        """Merge another trainer's cumulative data into this one."""
+        # Merge cumulative regrets and strategy sums
+        self.regret += other_trainer.regret
+        self.strategy_sum += other_trainer.strategy_sum
+        
+        # Recalculate average strategy from merged strategy_sum
+        for street in range(5):
+            for bucket in range(NUM_BUCKETS):
+                total = np.sum(self.strategy_sum[street][bucket])
+                if total > 0:
+                    self.average_strategy[street][bucket] = self.strategy_sum[street][bucket] / total
+                else:
+                    self.average_strategy[street][bucket] = np.ones(NUM_ACTIONS) / NUM_ACTIONS
+        
+        # Merge convergence history (optional, for plotting)
+        self.delta_regret.extend(other_trainer.delta_regret)
+        self.strategy_convergence.extend(other_trainer.strategy_convergence)
 
     def mccfr(self, infoset, reach_probab):
         self.prev_reach_probab = self.current_reach_probab # opponent's reach probability
@@ -506,7 +525,7 @@ class BotProcess:
                 port = server_socket.getsockname()[1]
 
                 proc = subprocess.Popen(
-                    [PYTHON_CMD, self.file_path, str(port)],
+                    [PYTHON_CMD, self.file_path, str(port), str(self.bot_id)],
                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                     cwd=os.path.dirname(os.path.abspath(self.file_path)))
                 self.proc = proc
@@ -533,9 +552,10 @@ class BotProcess:
             print(self.name, 'timed out or failed to connect.')
             self.bytes_queue.put(traceback.format_exc().encode())
         
-    def __init__(self, name, file_path):
+    def __init__(self, name, file_path, bot_id=0):
         self.name = name
         self.file_path = file_path
+        self.bot_id = bot_id
         self.bankroll = 0
         self.proc = None
         self.socketfile = None
@@ -774,8 +794,8 @@ class PokerMatch():
             print()
         print('Initializing Game Engine...')
         players = [
-            BotProcess(BOT_1_NAME, BOT_1_FILE),
-            BotProcess(BOT_2_NAME, BOT_2_FILE)
+            BotProcess(BOT_1_NAME, BOT_1_FILE, bot_id=0),
+            BotProcess(BOT_2_NAME, BOT_2_FILE, bot_id=1)
         ]
         all_bots = list(players)
         for player in players:
@@ -843,10 +863,28 @@ if __name__ == '__main__':
     trainer = Trainer()
     PokerMatch(small_log=args.small_log).run()
     
-    if os.path.exists('trainer_data.npz'):
-        data = np.load('trainer_data.npz')
-        trainer.delta_regret = data['delta_regret']
-        trainer.strategy_convergence = list(data['strategy_convergence'])
-        trainer.plot_results()
+    # Load and merge trainer states from both bots
+    trainer_0_file = 'trainer_bot_0.npz'
+    trainer_1_file = 'trainer_bot_1.npz'
+    
+    merged_trainer = Trainer()
+    
+    if os.path.exists(trainer_0_file):
+        data = np.load(trainer_0_file)
+        merged_trainer.delta_regret = list(data['delta_regret'])
+        merged_trainer.strategy_convergence = list(data['strategy_convergence'])
+        merged_trainer.regret = data['regret']
+        merged_trainer.strategy_sum = data['strategy_sum']
+    
+    if os.path.exists(trainer_1_file):
+        data = np.load(trainer_1_file)
+        other_trainer = Trainer()
+        other_trainer.delta_regret = list(data['delta_regret'])
+        other_trainer.strategy_convergence = list(data['strategy_convergence'])
+        other_trainer.regret = data['regret']
+        other_trainer.strategy_sum = data['strategy_sum']
+        merged_trainer.merge_trainer(other_trainer)
+    
+    merged_trainer.plot_results()
     
     

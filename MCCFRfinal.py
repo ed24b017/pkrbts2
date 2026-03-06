@@ -206,26 +206,31 @@ class Player(BaseBot):
         
         if chosen == 0:
             return ActionFold()
+        
         elif chosen == 1:
             return ActionCall()
+        
         elif chosen == 2:
             return ActionCheck()
+        
         elif chosen == 3:
             min_r, max_r = current_state.raise_bounds
             
-            target = min(min_r + int(current_state.pot * self.equity/4), max_r)
-            if (current_state.my_chips < target) : return ActionCall()
+            target = int(min_r + (max_r - min_r) * 0.2)
             return ActionRaise(target)
+        
         elif chosen == 4:
             min_r, max_r = current_state.raise_bounds
-            target = min(min_r + int(current_state.pot * self.equity/2), max_r)
-            if (current_state.my_chips < target) : return ActionCall()
+            target = int(min_r + (max_r - min_r) * 0.4)
+            
             return ActionRaise(target)
+        
         elif chosen == 5:
             min_r, max_r = current_state.raise_bounds
             target = min(current_state.my_chips, current_state.opp_chips)
             if (current_state.my_chips < target or target < min_r or target > max_r) : return ActionCall()
             return ActionRaise(target)
+        
         return ActionCall()
 
     def _infer_opp_bid(self, state: PokerState):

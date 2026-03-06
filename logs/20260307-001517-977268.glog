@@ -1,0 +1,62 @@
+2026-03-07 00:15:17 BotA vs BotB
+
+Round #1, BotA (0), BotB (0)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [6s 9d]
+BotB received [Jd Tc]
+BotA response misformatted: 
+BotA folds
+BotA awarded -10
+BotB awarded 10
+BotA response misformatted: 
+
+Round #2, BotB (10), BotA (-10)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [8h 5h]
+BotA received [Qs 4h]
+BotB response misformatted: 
+BotB folds
+BotB awarded -10
+BotA awarded 10
+BotB response misformatted: 
+BotA disconnected
+
+Round #3, BotA (0), BotB (0)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [7s 2h]
+BotB received [4c 2d]
+BotA disconnected
+BotA folds
+BotA awarded -10
+BotB awarded 10
+BotA disconnected
+BotB disconnected
+
+Round #4, BotB (10), BotA (-10)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [8c 4d]
+BotA received [4c 8s]
+BotB disconnected
+BotB folds
+BotB awarded -10
+BotA awarded 10
+BotB disconnected
+BotA disconnected
+
+Round #5, BotA (0), BotB (0)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [3c Th]
+BotB received [Jd Ts]
+BotA disconnected
+BotA folds
+BotA awarded -10
+BotB awarded 10
+BotA disconnected
+BotB disconnected
+
+Final, BotB (10), BotA (-10)

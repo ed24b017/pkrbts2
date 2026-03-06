@@ -90,14 +90,16 @@ class Trainer():
         for choice in legal_actions:
             for _ in range(nodes_to_terminal):
                 new_infoset = self.playoff(new_infoset, choice)
-                if new_infoset[4] == 1:
+                if new_infoset[4] == 1: ## opponent folded
                     p[choice] = new_infoset[3]
-                if new_infoset[0] == -1 or new_infoset[0] == 0:
+                    new_infoset[0] = -1
+                    break
+                if new_infoset[0] == -1 or new_infoset[0] == 0: ## you folded
                     p[choice] = new_infoset[4]
-                    continue
+                    break
                 new_infoset = self.board_reveal_card(new_infoset)
                 if new_infoset[0] == 5:
-                    pass
+                    break
                 ## figure out waht to do if opponent folds
             if self.mc_evaluate(new_infoset):
                 p[choice] = new_infoset[3]

@@ -182,19 +182,25 @@ class Trainer():
 
     
     def simulate_action(self, action, if_win, if_loss, my_balance, opp_balance):
-        ## !!! change the raise amounts
+        
         raise_amount = 0
+        
         if action == 1: # call
-            bid = 20 # idk bro, will sort bet amounts anol later
+            bid = if_win + if_loss
             return if_win + bid , if_loss - bid, my_balance - bid, opp_balance + bid
+        
         if action == 2: # check
             return if_win, if_loss, my_balance, opp_balance
+        
         if action == 3: # raise_small
-            raise_amount = min(my_balance, opp_balance, 0.5 * my_balance)
+            raise_amount = min(my_balance, opp_balance, int(0.2 * my_balance))
+            
         if action == 4: # raise_big
-            raise_amount = min(my_balance, opp_balance, 0.75 * my_balance)
+            raise_amount = min(my_balance, opp_balance, int(0.4 * my_balance))
+            
         if action == 5: # all_in
             raise_amount = min(my_balance, opp_balance)
+            
         return if_win + raise_amount, if_loss - raise_amount, my_balance - raise_amount, opp_balance + raise_amount
     
     def simulate_opponent_action(self, infoset):

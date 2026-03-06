@@ -30,7 +30,7 @@ sys.path.append(os.getcwd())
 
 from config import *
 
-NUM_ROUNDS = 1000
+NUM_ROUNDS = 100
 STARTING_STACK = 5000
 BIG_BLIND = 20
 SMALL_BLIND = 10
@@ -71,10 +71,10 @@ DECODE_ACTION = {
 
 class Trainer():
     def __init__(self):
-        self.regret = np.zeros((5, NUM_BUCKETS, NUM_ACTIONS)) 
-        self.strategy = np.zeros((5, NUM_BUCKETS, NUM_ACTIONS))
-        self.strategy_sum = np.zeros((5, NUM_BUCKETS, NUM_ACTIONS))
-        self.average_strategy = np.zeros((5, NUM_BUCKETS, NUM_ACTIONS))
+        self.regret = np.full((5, NUM_BUCKETS, NUM_ACTIONS), 0.2) 
+        self.strategy = np.full((5, NUM_BUCKETS, NUM_ACTIONS), 0.2)
+        self.strategy_sum = np.full((5, NUM_BUCKETS, NUM_ACTIONS), 0.2)
+        self.average_strategy = np.full((5, NUM_BUCKETS, NUM_ACTIONS), 0.2)
         self.delta_regret = []
         self.strategy_convergence = [] 
         self.prev_reach_probab = 1
@@ -227,7 +227,10 @@ class Trainer():
         legal_actions = self.get_new_legal_actions(infoset)
         strategy = self.average_strategy[street][bucket]
         # Get probabilities for legal actions
+        
         probs = [strategy[a] for a in legal_actions]
+        probs = [p if (isinstance(p, float) and p == p and p != float('inf')) else 0.0 for p in probs]
+
         total = sum(probs)
         if total == 0:
             # Uniform if no strategy
@@ -235,6 +238,7 @@ class Trainer():
         else:
             probs = [p / total for p in probs]
         # Sample action
+        
         action = random.choices(legal_actions, weights=probs)[0]
         # Simulate opponent's action (reversed from player's perspective)
         if_win = - int(infoset[4]) # - (-if_loss) = my_bet
@@ -295,8 +299,11 @@ class Trainer():
             self.strategy[street][bucket] = positive_regret / np.sum(positive_regret)
         else:
             self.strategy[street][bucket] = np.ones((NUM_ACTIONS)) / NUM_ACTIONS
-        self.strategy_sum[street][bucket] += self.strategy[street][bucket]* self.current_reach_probab # update strategy sum for computing average strategy later.
-        self.average_strategy[street][bucket] = self.strategy_sum[street][bucket] / np.sum(self.strategy_sum[street][bucket]) # compute average strategy
+        self.strategy_sum[street][bucket] += (self.strategy[street][bucket] * self.current_reach_probab) # update strategy sum for computing average strategy later.
+        if np.sum(self.strategy_sum[street][bucket]) != 0:
+            self.average_strategy[street][bucket] = self.strategy_sum[street][bucket] / np.sum(self.strategy_sum[street][bucket]) # compute average strategy
+        else : 
+            self.average_strategy[street][bucket] = np.ones(NUM_ACTIONS) / NUM_ACTIONS
 
     def mccfr(self, infoset, reach_probab):
         self.prev_reach_probab = self.current_reach_probab # opponent's reach probability
@@ -307,9 +314,11 @@ class Trainer():
         street = infoset[0]
         bucket = infoset[1]
         for a in range(NUM_ACTIONS):
-            regret = node_utilities[a] - np.dot(self.strategy[street][bucket], node_utilities)
-            self.regret[street][bucket] += regret * self.prev_reach_probab 
-        self.regret_matching(infoset) 
+            regret[a] = node_utilities[a] - np.dot(self.strategy[street][bucket], node_utilities)
+            self.regret[street][bucket][a] += regret[a] * self.prev_reach_probab 
+        self.regret_matching(infoset)
+            
+    
         self.delta_regret.append(np.linalg.norm(regret))
         self.strategy_convergence.append(-np.sum(self.strategy[street][bucket] * np.log(self.strategy[street][bucket] + 1e-12))) # Lower entropy - less randomness in the choice
 
@@ -332,17 +341,20 @@ class Trainer():
         plt.show()
 
         data = []
-        for street in range(self.strategy_sum.shape[0]):
-            for bucket in range(self.strategy_sum.shape[1]):
-                for action in range(self.strategy_sum.shape[2]):
+        
+        for street in range(self.regret.shape[0]):
+            for bucket in range(self.regret.shape[1]):
+                for action in range(self.regret.shape[2]):
                     data.append({
                         "street": street,
                         "bucket": bucket,
                         "action": action,
-                        "strategy_sum": self.strategy_sum[street, bucket, action]
+                        "strategy_sum": self.regret[street][bucket][action]
                     })
         df = pd.DataFrame(data)
+        print(df)
         df.to_csv("strategy_sum.csv", index=False)
+        print(f"Saved to: {os.path.abspath('strategy_sum.csv')}")
   
 HandResult = namedtuple('HandResult', ['payoffs', 'bids', 'parent_state'])
 
@@ -477,7 +489,6 @@ class GameState(
         next_chips[active] -= added
         next_wagers[active] += added
         return GameState(self.dealer + 1, self.street, self.auction, self.bids, next_wagers, next_chips, self.hands, self.opp_hands, self.deck, self)
-
 
 # BotWrapper --------------------------------------------------------------------------------------
 class BotProcess:

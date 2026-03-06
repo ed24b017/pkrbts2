@@ -22,7 +22,7 @@ STREET_MAP = {
     'river':    4,
 }
 
-CSV_DATA = '''
+STRATEGY = '''
 
 street,bucket,action,strategy_sum
 0,0,0,0.0
@@ -779,67 +779,35 @@ street,bucket,action,strategy_sum
 
 '''
 
-
-def load_strategy(path='strategy_sum.csv'):
-    strategy = np.zeros((5, NUM_BUCKETS, NUM_ACTIONS))
-    with open(path, 'r') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            s, b, a, val = int(row['street']), int(row['bucket']), int(row['action']), float(row['strategy_sum'])
-            strategy[s][b][a] = val
-    for s in range(5):
-        for b in range(NUM_BUCKETS):
-            total = strategy[s][b].sum()
-            if total > 0:
-                strategy[s][b] /= total
-            else:
-                strategy[s][b] = np.ones(NUM_ACTIONS) / NUM_ACTIONS
-    return strategy
-
-STRATEGY = load_strategy('strategy_sum.csv')
-
-
-def emc(my_hand_strs, board_strs, opp_known_strs, n=200):
-        """
-        Returns your win probability (0.0 - 1.0).
-        Uses Monte Carlo simulation.
-        Automatically includes opponent's revealed card when you win auction.
-        """
-        my_cards = [eval7.Card(c) for c in my_hand_strs]
-        board = [eval7.Card(c) for c in board_strs]
-        opp_known = [eval7.Card(c) for c in opp_known_strs]
-        dead = set(my_hand_strs + board_strs + opp_known_strs)
-
-        deck = [eval7.Card(r + s) for r in '23456789TJQKA' for s in 'shcd'
-                if (r + s) not in dead]
-
-        board_need = 5 - len(board)
-        opp_need = 2 - len(opp_known)
-
-        wins = ties = 0
-        for _ in range(n):
-            draw = random.sample(deck, opp_need + board_need)
-            opp_hand = opp_known + draw[:opp_need]
-            full_brd = board + draw[opp_need:]
-
-            my_score = eval7.evaluate(my_cards + full_brd)
-            opp_score = eval7.evaluate(opp_hand + full_brd)
-
-            if my_score > opp_score:
-                wins += 1
-            elif my_score == opp_score:
-                ties += 1
-
-        return (wins + 0.5 * ties) / n
-    
-    
-def ev (pot, cost_to_call):
-    return (cost_to_call/(pot + cost_to_call))
-
-
 class Player(BaseBot):
     def __init__(self) -> None:
         pass
+    
+    
+    def _compute_auction_bid(self, equity, my_chips):
+        
+            n = len(self.opp_bid_samples)
+
+            if n < 8:
+                if equity > 0.72:
+                    return max(1, int(my_chips * 0.04)) if my_chips > max(1, int(my_chips * 0.04)) else my_chips
+                elif equity > 0.52:
+                    return max(1, int(my_chips * 0.07)) if my_chips > max(1, int(my_chips * 0.07)) else my_chips
+                else:
+                    return max(1, int(my_chips * 0.09)) if my_chips > max(1, int(my_chips * 0.09)) else my_chips
+
+            # Use learned style
+            if self.opp_style == "low":
+                target_pct = 0.20 if equity > 0.72 else 0.33 if equity > 0.52 else 0.55
+            elif self.opp_style == "med":
+                target_pct = 0.25 if equity > 0.72 else 0.40 if equity > 0.52 else 0.65
+            else:  # high bidder
+                target_pct = 0.15 if equity > 0.72 else 0.25 if equity > 0.52 else 0.50
+
+            s = sorted(self.opp_bid_samples)
+            idx = max(0, min(int(target_pct * len(s)), len(s) - 1))
+            bid = s[idx]
+            return max(bid, my_chips) if my_chips > bid else my_chips
 
     def on_hand_start(self, game_info: GameInfo, current_state: PokerState) -> None:
         pass

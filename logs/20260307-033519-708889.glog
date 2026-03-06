@@ -1,0 +1,219 @@
+2026-03-07 03:35:19 BotA vs BotB
+
+Round #1, BotA (0), BotB (0)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [7d Qd]
+BotB received [4d 3c]
+BotA raises to 1032
+BotB raises to 3226
+BotA raises to 5000
+BotB calls
+Flop [4s Ah 2d], BotA (5000), BotB (5000)
+BotB bids 0
+BotA bids 0
+BotA won the auction and was revealed [3c]
+BotB won the auction and was revealed [7d]
+Flop [4s Ah 2d], BotA (5000), BotB (5000)
+BotB checks
+BotA checks
+Turn [4s Ah 2d 5d], BotA (5000), BotB (5000)
+BotB checks
+BotA checks
+River [4s Ah 2d 5d Qc], BotA (5000), BotB (5000)
+BotB checks
+BotA checks
+BotA shows [7d Qd]
+BotB shows [4d 3c]
+BotA awarded -5000
+BotB awarded 5000
+
+Round #2, BotB (5000), BotA (-5000)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [4d 7h]
+BotA received [5c 6h]
+BotB raises to 1032
+BotA raises to 3968
+BotB calls
+Flop [3c Js Ks], BotB (3968), BotA (3968)
+BotA bids 92
+BotB bids 92
+BotB won the auction and was revealed [5c]
+BotA won the auction and was revealed [7h]
+Flop [3c Js Ks], BotB (4060), BotA (4060)
+BotA bets 204
+BotB raises to 620
+BotA calls
+Turn [3c Js Ks 6s], BotB (4680), BotA (4680)
+BotA checks
+BotB bets 80
+BotA calls
+River [3c Js Ks 6s Qc], BotB (4760), BotA (4760)
+BotA bets 240
+BotB calls
+BotB shows [4d 7h]
+BotA shows [5c 6h]
+BotB awarded -5000
+BotA awarded 5000
+
+Round #3, BotA (0), BotB (0)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [7s Kc]
+BotB received [7d 8c]
+BotA raises to 4980
+BotB calls
+Flop [9c Qs 3h], BotA (4980), BotB (4980)
+BotB bids 1
+BotA bids 1
+BotA won the auction and was revealed [7d]
+BotB won the auction and was revealed [7s]
+Flop [9c Qs 3h], BotA (4981), BotB (4981)
+BotB checks
+BotA bets 19
+BotB calls
+Turn [9c Qs 3h 5c], BotA (5000), BotB (5000)
+BotB checks
+BotA checks
+River [9c Qs 3h 5c 2h], BotA (5000), BotB (5000)
+BotB checks
+BotA checks
+BotA shows [7s Kc]
+BotB shows [7d 8c]
+BotA awarded 5000
+BotB awarded -5000
+
+Round #4, BotB (-5000), BotA (5000)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [5h 3s]
+BotA received [Ts 9d]
+BotB raises to 2024
+BotA calls
+Flop [Ad 4c Tc], BotB (2024), BotA (2024)
+BotA bids 119
+BotB bids 267
+BotB won the auction and was revealed [Ts]
+Flop [Ad 4c Tc], BotB (2143), BotA (2024)
+BotA bets 587
+BotB raises to 1510
+BotA raises to 2602
+BotB calls
+Turn [Ad 4c Tc 6s], BotB (4745), BotA (4626)
+BotA bets 255
+BotB calls
+River [Ad 4c Tc 6s 2d], BotB (5000), BotA (4881)
+BotA checks
+BotB checks
+BotB shows [5h 3s]
+BotA shows [Ts 9d]
+BotB awarded 4881
+BotA awarded -4881
+
+Round #5, BotA (119), BotB (-119)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [3c 9h]
+BotB received [8s Js]
+BotA folds
+BotA awarded -10
+BotB awarded 10
+
+Round #6, BotB (-109), BotA (109)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [3s Ad]
+BotA received [Kc 2h]
+BotB raises to 4980
+BotA calls
+Flop [As 2d Ac], BotB (4980), BotA (4980)
+BotA bids 1
+BotB bids 1
+BotB won the auction and was revealed [2h]
+BotA won the auction and was revealed [3s]
+Flop [As 2d Ac], BotB (4981), BotA (4981)
+BotA bets 19
+BotB folds
+BotB awarded -4981
+BotA awarded 4981
+
+Round #7, BotA (5090), BotB (-5090)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [Tc Kc]
+BotB received [7d Jc]
+BotA folds
+BotA awarded -10
+BotB awarded 10
+
+Round #8, BotB (-5080), BotA (5080)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [5d Ah]
+BotA received [4d Tc]
+BotB calls
+BotA checks
+Flop [7s 3h Js], BotB (20), BotA (20)
+BotA bids 448
+BotB bids 448
+BotB won the auction and was revealed [4d]
+BotA won the auction and was revealed [5d]
+Flop [7s 3h Js], BotB (468), BotA (468)
+BotA bets 1824
+BotB raises to 4001
+BotA calls
+Turn [7s 3h Js Qh], BotB (4469), BotA (4469)
+BotA bets 122
+BotB raises to 301
+BotA raises to 500
+BotB calls
+River [7s 3h Js Qh Qd], BotB (4969), BotA (4969)
+BotA bets 24
+BotB calls
+BotB shows [5d Ah]
+BotA shows [4d Tc]
+BotB awarded 4993
+BotA awarded -4993
+
+Round #9, BotA (87), BotB (-87)
+BotA posts blind: 10
+BotB posts blind: 20
+BotA received [3s 2s]
+BotB received [Td As]
+BotA raises to 4980
+BotB calls
+Flop [6h 9s 4s], BotA (4980), BotB (4980)
+BotB bids 1
+BotA bids 1
+BotA won the auction and was revealed [As]
+BotB won the auction and was revealed [2s]
+Flop [6h 9s 4s], BotA (4981), BotB (4981)
+BotB bets 19
+BotA folds
+BotA awarded -4981
+BotB awarded 4981
+
+Round #10, BotB (4894), BotA (-4894)
+BotB posts blind: 10
+BotA posts blind: 20
+BotB received [7h 2s]
+BotA received [Ah 7c]
+BotB calls
+BotA raises to 2024
+BotB calls
+Flop [4c 9s Qs], BotB (2024), BotA (2024)
+BotA bids 267
+BotB bids 267
+BotB won the auction and was revealed [Ah]
+BotA won the auction and was revealed [2s]
+Flop [4c 9s Qs], BotB (2291), BotA (2291)
+BotA checks
+BotB checks
+Turn [4c 9s Qs Kd], BotB (2291), BotA (2291)
+BotA bets 2709
+BotB folds
+BotB awarded -2291
+BotA awarded 2291
+
+Final, BotA (-2603), BotB (2603)

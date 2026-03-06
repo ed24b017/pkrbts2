@@ -181,7 +181,6 @@ class Player(BaseBot):
 
         bucket = infoset[1]
         street_int = infoset[0]
-        
         trainer.mccfr(infoset, self.reach_probab)
         p = trainer.average_strategy[street_int][bucket]
         a = self.get_available_actions(current_state)
@@ -201,8 +200,8 @@ class Player(BaseBot):
             p[:] = p[:] / total
             
         chosen = np.random.choice(len(p), p=p)
-        self.reach_probab *= p[chosen]
         
+        self.reach_probab *= p[chosen]
         self.equity = self.equity_mc(current_state)
         
         if chosen == 0:

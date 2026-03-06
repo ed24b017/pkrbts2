@@ -146,6 +146,8 @@ class Trainer():
         legal_actions = infoset[5]
         my_balance =infoset[6]
         opp_balance = infoset[7]
+        if current_node >= 5:
+            continue
         if_win, if_loss, my_balance, opp_balance = self.simulate_action(choice, if_win, if_loss, my_balance, opp_balance)
         infoset = [current_node, bucket, (my_hand, board, opp_revealed), if_win, if_loss, legal_actions, my_balance, opp_balance]
         if_win, if_loss, my_balance, opp_balance= self.simulate_opponent_action(infoset)

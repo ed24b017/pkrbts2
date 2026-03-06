@@ -230,7 +230,6 @@ class Trainer():
         
         probs = [strategy[a] for a in legal_actions]
         probs = [p if (isinstance(p, float) and p == p and p != float('inf')) else 0.0 for p in probs]
-
         total = sum(probs)
         if total == 0:
             # Uniform if no strategy
